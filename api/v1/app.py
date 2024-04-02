@@ -7,8 +7,6 @@ from models import storage
 from api.v1.views import app_views
 from os import getenv
 
-from models.state import State
-from models.amenity import Amenity
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
