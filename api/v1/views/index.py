@@ -1,35 +1,36 @@
 #!/usr/bin/python3
-"""Define routes for blueprint
-"""
-
+""" Module to retrives an object """
 from api.v1.views import app_views
 from flask import jsonify
 from models import storage
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+from models.user import User
+from models.place import Place
 
-
-@app_views.route('/status', strict_slashes=False)
+@app_views.route('/status')
 def status():
-    """Return status of application
     """
-    return jsonify({'status': 'OK'})
+    Return status ok
+    Returns:
+        json: status
+    """
+    return jsonify({"status": "OK"})
 
-
-@app_views.route('/stats', strict_slashes=False)
-def counts():
-    """Retrieve counts of various objects in storage."""
-    from models.amenity import Amenity
-    from models.city import City
-    from models.place import Place
-    from models.review import Review
-    from models.state import State
-    from models.user import User
-
-    class_map = {"amenity_counts": Amenity, "city_counts": City,
-                 "place_counts": Place, "review_counts": Review,
-                 "state_counts": State, "user_counts": User}
-    counts_dict = {}
-
-    for key, model in class_map.items():
-        counts_dict[key] = storage.count(model)
-
-    return jsonify(counts_dict)
+@app_views.route('/stats')
+def show_stats():
+    """
+    Returns:
+        json: number of objects
+    """
+    entity_counts = {
+        'amenities': storage.count(Amenity),
+        'cities': storage.count(City),
+        'places': storage.count(Place),
+        'reviews': storage.count(Review),
+        'states': storage.count(State),
+        'users': storage.count(User)
+    }
+    return jsonify(entity_counts)
